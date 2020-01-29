@@ -24,15 +24,25 @@ cursor leaves a fragment.")
 (defun org-fragtog--post-cmd ()
   "This function runs in post-command-hook in org-fragtog-mode. It handles
 toggling fragments depending on whether the cursor entered or exited them."
-  (when (org-fragtog--cursor-in-frag-p)
-    (org-latex-preview)))
+  (let ((cursor-frag (org-fragtog--cursor-frag)))
+    (if (cursor-frag)
+	((setq org-fragtog--prev-frag cursor-frag)
+	 (org-latex-preview))
+      ()
+      )))
 
-(defun org-fragtog--cursor-in-frag-p ()
-  "Returns non-nil if the cursor is in a latex fragment and nil otherwise"
-  (let
-      ;; Type of element surrounding the cursor
-      ((elem-type (car (org-element-context))))
-    ;; Latex fragment or environment surrounding the cursor
-    (member elem-type '(latex-fragment latex-environment))))
+(defun org-fragtog--cursor-frag ()
+  "Returns the fragment currently surrounding the cursor, or nil if it does not
+exist"
+  (let*
+      ;; Element surrounding the cursor
+      ((elem (org-element-context))
+       ;; Type of element surrounding the cursor
+       (elem-type (car elem))
+       ;; A latex fragment or environment is surrounding the cursor
+       (elem-is-latex (member elem-type '(latex-fragment latex-environment))))
+    (if elem-is-latex
+	elem
+      nil)))
 
 ;;; org-latex-fragment-autotoggle.el ends here

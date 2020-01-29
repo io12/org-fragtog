@@ -10,13 +10,20 @@
 
 ;;;###autoload
 (define-minor-mode org-fragtog-mode
-  "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically toggles org-mode latex fragment previews as the cursor enters and exits them"
+  "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
+toggles org-mode latex fragment previews as the cursor enters and exits them"
   nil nil nil
   (when (eq 'org-mode major-mode)
     (add-hook 'post-command-hook 'org-fragtog--post-cmd)))
 
+(defvar org-fragtog--prev-frag
+  nil
+  "Previous fragment that surrounded the cursor. This is used to track when the
+cursor leaves a fragment.")
+
 (defun org-fragtog--post-cmd ()
-  "This function runs in post-command-hook in org-latex-fragment-autotoggle-mode. It handles toggling fragments depending on whether the cursor entered or exited them."
+  "This function runs in post-command-hook in org-fragtog-mode. It handles
+toggling fragments depending on whether the cursor entered or exited them."
   (when (org-fragtog--cursor-in-frag-p)
     (org-latex-preview)))
 

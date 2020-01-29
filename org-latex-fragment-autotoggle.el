@@ -26,7 +26,7 @@ cursor leaves a fragment.")
 toggling fragments depending on whether the cursor entered or exited them."
   (let* ((prev-frag org-fragtog--prev-frag)
 	 (cursor-frag (org-fragtog--cursor-frag))
-	 (frag-same (equal cursor-frag org-fragtog--prev-frag))
+	 (frag-same (equal cursor-frag prev-frag))
 	 (frag-changed (not frag-same)))
     (setq org-fragtog--prev-frag cursor-frag)
     (cond

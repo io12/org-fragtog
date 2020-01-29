@@ -25,9 +25,10 @@ cursor leaves a fragment.")
   "This function runs in post-command-hook in org-fragtog-mode. It handles
 toggling fragments depending on whether the cursor entered or exited them."
   (let ((cursor-frag (org-fragtog--cursor-frag)))
-    (if (cursor-frag)
-	((setq org-fragtog--prev-frag cursor-frag)
-	 (org-latex-preview))
+    (if cursor-frag
+	(progn
+	  (setq org-fragtog--prev-frag cursor-frag)
+	  (org-latex-preview))
       ()
       )))
 

@@ -24,13 +24,19 @@ cursor leaves a fragment.")
 (defun org-fragtog--post-cmd ()
   "This function runs in post-command-hook in org-fragtog-mode. It handles
 toggling fragments depending on whether the cursor entered or exited them."
-  (let ((cursor-frag (org-fragtog--cursor-frag)))
-    (if cursor-frag
-	(progn
-	  (setq org-fragtog--prev-frag cursor-frag)
-	  (org-latex-preview))
-      ()
-      )))
+  (let* ((prev-frag org-fragtog--prev-frag)
+	 (cursor-frag (org-fragtog--cursor-frag))
+	 (frag-same (equal cursor-frag org-fragtog--prev-frag))
+	 (frag-changed (not frag-same)))
+    (setq org-fragtog--prev-frag cursor-frag)
+    (cond
+     ;; Cursor entered fragment
+     ((and cursor-frag frag-changed)
+      (progn
+	(org-clear-latex-preview (point))))
+     ;; Cursor left fragment
+     ((not cursor-frag)
+      (org-fragtog--enable-frag prev-frag)))))
 
 (defun org-fragtog--cursor-frag ()
   "Returns the fragment currently surrounding the cursor, or nil if it does not
@@ -45,5 +51,12 @@ exist"
     (if elem-is-latex
 	elem
       nil)))
+
+(defun org-fragtog--enable-frag (frag)
+  "TODO: docs"
+  (save-excursion
+    (goto-char (org-element-property :begin frag))
+    (org-clear-latex-preview (point))
+    (org-latex-preview)))
 
 ;;; org-latex-fragment-autotoggle.el ends here

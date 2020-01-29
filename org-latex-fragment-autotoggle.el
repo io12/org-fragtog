@@ -28,15 +28,16 @@ toggling fragments depending on whether the cursor entered or exited them."
 	 (cursor-frag (org-fragtog--cursor-frag))
 	 (frag-same (equal cursor-frag prev-frag))
 	 (frag-changed (not frag-same)))
-    (setq org-fragtog--prev-frag cursor-frag)
-    (cond
-     ;; Cursor entered fragment
-     ((and cursor-frag frag-changed)
-      (progn
-	(org-clear-latex-preview (point))))
-     ;; Cursor left fragment
-     ((not cursor-frag)
-      (org-fragtog--enable-frag prev-frag)))))
+    ;; Only do anything if the current fragment changed
+    (when frag-changed
+      ;; Current fragment is the new previous
+      (setq org-fragtog--prev-frag cursor-frag)
+      ;; Enable fragment if cursor left it
+      (when prev-frag
+	(org-fragtog--enable-frag prev-frag))
+      ;; Disable fragment if cursor entered it
+      (when cursor-frag
+	(org-clear-latex-preview (point))))))
 
 (defun org-fragtog--cursor-frag ()
   "Returns the fragment currently surrounding the cursor, or nil if it does not

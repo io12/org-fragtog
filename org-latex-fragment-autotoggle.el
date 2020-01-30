@@ -27,8 +27,10 @@ toggling fragments depending on whether the cursor entered or exited them."
   (let* ((prev-frag org-fragtog--prev-frag)
 	 (cursor-frag (org-fragtog--cursor-frag))
 	 (frag-same (equal
-		     (org-fragtog--frag-pos cursor-frag)
-		     (org-fragtog--frag-pos prev-frag)))
+		     ;; Fragments are considered the same if they have the same
+		     ;; start position
+		     (car (org-fragtog--frag-pos cursor-frag))
+		     (car (org-fragtog--frag-pos prev-frag))))
 	 (frag-changed (not frag-same)))
     ;; Only do anything if the current fragment changed
     (when frag-changed

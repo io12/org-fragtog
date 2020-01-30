@@ -26,7 +26,9 @@ cursor leaves a fragment.")
 toggling fragments depending on whether the cursor entered or exited them."
   (let* ((prev-frag org-fragtog--prev-frag)
 	 (cursor-frag (org-fragtog--cursor-frag))
-	 (frag-same (equal cursor-frag prev-frag))
+	 (frag-same (equal
+		     (org-fragtog--frag-pos cursor-frag)
+		     (org-fragtog--frag-pos prev-frag)))
 	 (frag-changed (not frag-same)))
     ;; Only do anything if the current fragment changed
     (when frag-changed
@@ -37,7 +39,7 @@ toggling fragments depending on whether the cursor entered or exited them."
 	(org-fragtog--enable-frag prev-frag))
       ;; Disable fragment if cursor entered it
       (when cursor-frag
-	(org-clear-latex-preview (point))))))
+	(org-fragtog--disable-frag cursor-frag)))))
 
 (defun org-fragtog--cursor-frag ()
   "Returns the fragment currently surrounding the cursor, or nil if it does not
@@ -55,9 +57,26 @@ exist"
 
 (defun org-fragtog--enable-frag (frag)
   "TODO: docs"
+  (remove-hook 'post-command-hook 'org-fragtog--post-cmd)
+  (org-fragtog--disable-frag frag)
   (save-excursion
-    (goto-char (org-element-property :begin frag))
-    (org-clear-latex-preview (point))
-    (org-latex-preview)))
+    (goto-char (car
+		(org-fragtog--frag-pos frag)))
+    (org-latex-preview))
+  (add-hook 'post-command-hook 'org-fragtog--post-cmd))
+
+(defun org-fragtog--disable-frag (frag)
+  "TODO: docs"
+  (let
+      ((pos (org-fragtog--frag-pos frag)))
+    (org-clear-latex-preview (car pos)
+			     (cdr pos))))
+
+(defun org-fragtog--frag-pos (frag)
+  "Get the position of a fragment. Returns a cons of the begin and end
+positions."
+  (cons
+   (org-element-property :begin frag)
+   (org-element-property :end frag)))
 
 ;;; org-latex-fragment-autotoggle.el ends here

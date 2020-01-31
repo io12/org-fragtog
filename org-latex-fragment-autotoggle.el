@@ -61,13 +61,11 @@ exist"
 
 (defun org-fragtog--enable-frag (frag)
   "TODO: docs"
-  (remove-hook 'post-command-hook 'org-fragtog--post-cmd)
   (org-fragtog--disable-frag frag)
   (save-excursion
     (goto-char (car
 		(org-fragtog--frag-pos frag)))
-    (org-latex-preview))
-  (add-hook 'post-command-hook 'org-fragtog--post-cmd))
+    (org-latex-preview)))
 
 (defun org-fragtog--disable-frag (frag)
   "TODO: docs"

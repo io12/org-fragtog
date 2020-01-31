@@ -68,15 +68,21 @@ exist"
       nil)))
 
 (defun org-fragtog--enable-frag (frag)
-  "TODO: docs"
+  "Enable the org latex fragment preview for the specified fragment."
+
+  ;; The fragment must be disabled before org-latex-preview, since
+  ;; org-latex-preview only toggles, leaving no guarantee that it's enabled
+  ;; afterwards.
   (org-fragtog--disable-frag frag)
+
+  ;; Move to fragment and enable
   (save-excursion
     (goto-char (car
 		(org-fragtog--frag-pos frag)))
     (org-latex-preview)))
 
 (defun org-fragtog--disable-frag (frag)
-  "TODO: docs"
+  "Disable the org latex fragment preview for the specified fragment."
   (let
       ((pos (org-fragtog--frag-pos frag)))
     (org-clear-latex-preview (car pos)

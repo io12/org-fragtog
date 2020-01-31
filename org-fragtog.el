@@ -5,7 +5,7 @@
 ;; Version: 0.1.0
 ;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
-;; Package-Requires: ((org "9.3.2"))
+;; Package-Requires: ((emacs "24.3") org)
 
 ;;; Commentary:
 
@@ -100,5 +100,7 @@ Return a cons of the begin and end positions."
   (cons
    (org-element-property :begin frag)
    (org-element-property :end frag)))
+
+(provide 'org-fragtog)
 
 ;;; org-fragtog.el ends here

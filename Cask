@@ -2,4 +2,5 @@
 (package-file "org-fragtog.el")
 
 (source gnu)
-(depends-on "org" "9.3.2")
+(depends-on "emacs" "24.3")
+(depends-on "org")

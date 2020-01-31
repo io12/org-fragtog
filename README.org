@@ -1,0 +1,12 @@
+* ~org-fragtog~
+Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
+** About
+[[https://orgmode.org/][Org mode]] supports inline image previews of latex fragments. These can be toggled with @@html:<kbd>@@ C-c C-x C-l @@html:</kbd>@@. ~org-fragtog~ automates this, so fragment previews are disabled for editing when your cursor steps onto them, and re-enabled when the cursor leaves.
+
+[[./demo.gif]]
+** Setup
+Install and load the package, then add the snippet below to your config.
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-fragtog-mode)
+#+end_src

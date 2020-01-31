@@ -5,7 +5,7 @@
 ;; Version: 0.1.0
 ;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
-;; Package-Requires: (org)
+;; Package-Requires: ((org "9.3.2"))
 
 ;;; Commentary:
 

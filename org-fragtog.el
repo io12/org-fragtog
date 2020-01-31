@@ -1,9 +1,9 @@
-;;; org-latex-fragment-autotoggle.el --- Automatically toggle org latex fragments
+;;; org-fragtog.el --- Automatically toggle org latex fragments
 
 ;; Copyright (C) 2020 Benjamin Levy
 ;; Author: Benjamin Levy <blevy@protonmail.com>
 ;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
-;; Homepage: https://github.com/io12/org-latex-fragment-autotoggle
+;; Homepage: https://github.com/io12/org-fragtog
 ;; Package-Requires: (org)
 
 ;;; Code:
@@ -81,4 +81,4 @@ positions."
    (org-element-property :begin frag)
    (org-element-property :end frag)))
 
-;;; org-latex-fragment-autotoggle.el ends here
+;;; org-fragtog.el ends here

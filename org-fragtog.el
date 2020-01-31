@@ -21,20 +21,26 @@ toggles org-mode latex fragment previews as the cursor enters and exits them"
 (make-variable-buffer-local
  (defvar org-fragtog--prev-frag
    nil
-   "Previous fragment that surrounded the cursor. This is used to track when the
-cursor leaves a fragment."))
+   "Previous fragment that surrounded the cursor, or nil if the cursor was not
+on a fragment. This is used to track when the cursor leaves a fragment."))
 
 (defun org-fragtog--post-cmd ()
   "This function runs in post-command-hook in org-fragtog-mode. It handles
 toggling fragments depending on whether the cursor entered or exited them."
-  (let* ((prev-frag org-fragtog--prev-frag)
-	 (cursor-frag (org-fragtog--cursor-frag))
-	 (frag-same (equal
-		     ;; Fragments are considered the same if they have the same
-		     ;; start position
-		     (car (org-fragtog--frag-pos cursor-frag))
-		     (car (org-fragtog--frag-pos prev-frag))))
-	 (frag-changed (not frag-same)))
+  (let*
+      ;; Previous fragment
+      ((prev-frag org-fragtog--prev-frag)
+       ;; Current fragment
+       (cursor-frag (org-fragtog--cursor-frag))
+       ;; The current fragment didn't change
+       (frag-same (equal
+		   ;; Fragments are considered the same if they have the same
+		   ;; start position
+		   (car (org-fragtog--frag-pos cursor-frag))
+		   (car (org-fragtog--frag-pos prev-frag))))
+       ;; The current fragment changed
+       (frag-changed (not frag-same)))
+
     ;; Only do anything if the current fragment changed
     (when frag-changed
       ;; Current fragment is the new previous
@@ -56,6 +62,7 @@ exist"
        (elem-type (car elem))
        ;; A latex fragment or environment is surrounding the cursor
        (elem-is-latex (member elem-type '(latex-fragment latex-environment))))
+
     (if elem-is-latex
 	elem
       nil)))

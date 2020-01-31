@@ -13,13 +13,15 @@
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
 toggles org-mode latex fragment previews as the cursor enters and exits them"
   nil nil nil
-  (when (eq 'org-mode major-mode)
-    (add-hook 'post-command-hook 'org-fragtog--post-cmd)))
+  (if (and org-fragtog-mode (eq major-mode 'org-mode))
+      (add-hook 'post-command-hook 'org-fragtog--post-cmd)
+    (remove-hook 'post-command-hook 'org-fragtog--post-cmd)))
 
-(defvar org-fragtog--prev-frag
-  nil
-  "Previous fragment that surrounded the cursor. This is used to track when the
-cursor leaves a fragment.")
+(make-variable-buffer-local
+ (defvar org-fragtog--prev-frag
+   nil
+   "Previous fragment that surrounded the cursor. This is used to track when the
+cursor leaves a fragment."))
 
 (defun org-fragtog--post-cmd ()
   "This function runs in post-command-hook in org-fragtog-mode. It handles

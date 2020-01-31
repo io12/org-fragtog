@@ -1,4 +1,4 @@
-;;; org-fragtog.el --- Automatically toggle org latex fragments
+;;; org-fragtog.el -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020 Benjamin Levy
 ;; Author: Benjamin Levy <blevy@protonmail.com>

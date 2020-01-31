@@ -1,4 +1,4 @@
-;;; org-fragtog.el -*- lexical-binding: t; -*-
+;;; org-fragtog.el --- Auto-toggle org fragments -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020 Benjamin Levy
 ;; Author: Benjamin Levy <blevy@protonmail.com>
@@ -31,7 +31,7 @@ toggles org-mode latex fragment previews as the cursor enters and exits them"
 on a fragment. This is used to track when the cursor leaves a fragment."))
 
 (defun org-fragtog--post-cmd ()
-  "This function executes in post-command-hook in org-fragtog-mode.
+  "This function is executed by 'post-command-hook' in 'org-fragtog-mode'.
 It handles toggling fragments depending on whether the cursor entered or exited them."
   (let*
       ;; Previous fragment

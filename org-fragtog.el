@@ -7,6 +7,12 @@
 ;; Homepage: https://github.com/io12/org-fragtog
 ;; Package-Requires: (org)
 
+;;; Commentary:
+
+;; This package automates toggling org-mode latex fragment previews. Fragment
+;; previews are disabled for editing when your cursor steps onto them, and
+;; re-enabled when the cursor leaves.
+
 ;;; Code:
 
 ;;;###autoload
@@ -25,8 +31,8 @@ toggles org-mode latex fragment previews as the cursor enters and exits them"
 on a fragment. This is used to track when the cursor leaves a fragment."))
 
 (defun org-fragtog--post-cmd ()
-  "This function runs in post-command-hook in org-fragtog-mode. It handles
-toggling fragments depending on whether the cursor entered or exited them."
+  "This function executes in post-command-hook in org-fragtog-mode.
+It handles toggling fragments depending on whether the cursor entered or exited them."
   (let*
       ;; Previous fragment
       ((prev-frag org-fragtog--prev-frag)
@@ -53,8 +59,8 @@ toggling fragments depending on whether the cursor entered or exited them."
 	(org-fragtog--disable-frag cursor-frag)))))
 
 (defun org-fragtog--cursor-frag ()
-  "Returns the fragment currently surrounding the cursor, or nil if it does not
-exist"
+  "Return the fragment currently surrounding the cursor.
+If there is none, return nil."
   (let*
       ;; Element surrounding the cursor
       ((elem (org-element-context))
@@ -68,7 +74,7 @@ exist"
       nil)))
 
 (defun org-fragtog--enable-frag (frag)
-  "Enable the org latex fragment preview for the specified fragment."
+  "Enable the org latex fragment preview for the fragment FRAG."
 
   ;; The fragment must be disabled before org-latex-preview, since
   ;; org-latex-preview only toggles, leaving no guarantee that it's enabled
@@ -82,15 +88,15 @@ exist"
     (org-latex-preview)))
 
 (defun org-fragtog--disable-frag (frag)
-  "Disable the org latex fragment preview for the specified fragment."
+  "Disable the org latex fragment preview for the fragment FRAG."
   (let
       ((pos (org-fragtog--frag-pos frag)))
     (org-clear-latex-preview (car pos)
 			     (cdr pos))))
 
 (defun org-fragtog--frag-pos (frag)
-  "Get the position of a fragment. Returns a cons of the begin and end
-positions."
+  "Get the position of the fragment FRAG.
+Return a cons of the begin and end positions."
   (cons
    (org-element-property :begin frag)
    (org-element-property :end frag)))

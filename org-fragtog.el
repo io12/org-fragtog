@@ -1,11 +1,11 @@
 ;;; org-fragtog.el --- Auto-toggle org fragments -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020 Benjamin Levy
+;; Copyright (C) 2020 Benjamin Levy - MIT/X11 License
 ;; Author: Benjamin Levy <blevy@protonmail.com>
 ;; Version: 0.1.0
 ;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
-;; Package-Requires: ((emacs "24.3") org)
+;; Package-Requires: ((emacs "24.3") (org "9.3.2"))
 
 ;;; Commentary:
 
@@ -15,14 +15,16 @@
 
 ;;; Code:
 
+(require 'org)
+
 ;;;###autoload
 (define-minor-mode org-fragtog-mode
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
 toggles org-mode latex fragment previews as the cursor enters and exits them"
   nil nil nil
   (if (and org-fragtog-mode (eq major-mode 'org-mode))
-      (add-hook 'post-command-hook 'org-fragtog--post-cmd nil t)
-    (remove-hook 'post-command-hook 'org-fragtog--post-cmd t)))
+      (add-hook 'post-command-hook #'org-fragtog--post-cmd nil t)
+    (remove-hook 'post-command-hook #'org-fragtog--post-cmd t)))
 
 (make-variable-buffer-local
  (defvar org-fragtog--prev-frag

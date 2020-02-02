@@ -10,3 +10,5 @@ Install and load the package, then add the snippet below to your config.
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-fragtog-mode)
 #+end_src
+
+Note that ~org-fragtog~ requires a newer version of ~org-mode~ than what is currently distributed with Emacs. You can get the latest version of Org from [[https://orgmode.org/elpa.html][Org ELPA]].

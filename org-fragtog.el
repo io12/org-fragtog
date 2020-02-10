@@ -27,11 +27,9 @@ toggles org-mode latex fragment previews as the cursor enters and exits them"
       (add-hook 'post-command-hook #'org-fragtog--post-cmd nil t)
     (remove-hook 'post-command-hook #'org-fragtog--post-cmd t)))
 
-(make-variable-buffer-local
- (defvar org-fragtog--prev-frag
-   nil
-   "Previous fragment that surrounded the cursor, or nil if the cursor was not
-on a fragment. This is used to track when the cursor leaves a fragment."))
+(defvar-local org-fragtog--prev-frag nil
+  "Previous fragment that surrounded the cursor, or nil if the cursor was not
+on a fragment. This is used to track when the cursor leaves a fragment.")
 
 (defun org-fragtog--post-cmd ()
   "This function is executed by 'post-command-hook' in 'org-fragtog-mode'.

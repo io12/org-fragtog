@@ -1,3 +1,5 @@
+[[https://melpa.org/#/org-fragtog][file:https://melpa.org/packages/org-fragtog-badge.svg]]
+
 * ~org-fragtog~
 Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
 ** About

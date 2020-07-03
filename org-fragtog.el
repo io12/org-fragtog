@@ -41,7 +41,7 @@
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
 toggles org-mode latex fragment previews as the cursor enters and exits them"
   nil nil nil
-  (if (and org-fragtog-mode (derived-mode-p 'org-mode))
+  (if org-fragtog-mode
       (add-hook 'post-command-hook #'org-fragtog--post-cmd nil t)
     (remove-hook 'post-command-hook #'org-fragtog--post-cmd t)))
 

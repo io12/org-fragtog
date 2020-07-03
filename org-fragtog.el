@@ -59,10 +59,10 @@ It handles toggling fragments depending on whether the cursor entered or exited 
        (cursor-frag (org-fragtog--cursor-frag))
        ;; The current fragment didn't change
        (frag-same (equal
-		   ;; Fragments are considered the same if they have the same
-		   ;; start position
-		   (car (org-fragtog--frag-pos cursor-frag))
-		   (car (org-fragtog--frag-pos prev-frag))))
+                   ;; Fragments are considered the same if they have the same
+                   ;; start position
+                   (car (org-fragtog--frag-pos cursor-frag))
+                   (car (org-fragtog--frag-pos prev-frag))))
        ;; The current fragment changed
        (frag-changed (not frag-same)))
 
@@ -72,10 +72,10 @@ It handles toggling fragments depending on whether the cursor entered or exited 
       (setq org-fragtog--prev-frag cursor-frag)
       ;; Enable fragment if cursor left it
       (when prev-frag
-	(org-fragtog--enable-frag prev-frag))
+        (org-fragtog--enable-frag prev-frag))
       ;; Disable fragment if cursor entered it
       (when cursor-frag
-	(org-fragtog--disable-frag cursor-frag)))))
+        (org-fragtog--disable-frag cursor-frag)))))
 
 (defun org-fragtog--cursor-frag ()
   "Return the fragment currently surrounding the cursor.
@@ -89,7 +89,7 @@ If there is none, return nil."
        (elem-is-latex (member elem-type '(latex-fragment latex-environment))))
 
     (if elem-is-latex
-	elem
+        elem
       nil)))
 
 (defun org-fragtog--enable-frag (frag)
@@ -103,7 +103,7 @@ If there is none, return nil."
   ;; Move to fragment and enable
   (save-excursion
     (goto-char (car
-		(org-fragtog--frag-pos frag)))
+                (org-fragtog--frag-pos frag)))
     (org-latex-preview)))
 
 (defun org-fragtog--disable-frag (frag)
@@ -111,7 +111,7 @@ If there is none, return nil."
   (let
       ((pos (org-fragtog--frag-pos frag)))
     (org-clear-latex-preview (car pos)
-			     (cdr pos))))
+                             (cdr pos))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

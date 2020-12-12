@@ -36,6 +36,16 @@
 
 (require 'org)
 
+(defgroup org-fragtog nil
+  "Automatically toggle org-mode latex fragment previews as the
+cursor enters and exits them."
+  :group 'org)
+
+(defcustom org-fragtog-preview-delay
+  .0
+  "The idle delay in seconds until preview starts automatically."
+  :type 'number)
+
 ;;;###autoload
 (define-minor-mode org-fragtog-mode
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
@@ -104,7 +114,9 @@ If there is none, return nil."
   (save-excursion
     (goto-char (car
                 (org-fragtog--frag-pos frag)))
-    (org-latex-preview)))
+    (if (> org-fragtog-preview-delay 0)
+        (run-with-idle-timer org-fragtog-preview-delay nil #'org-latex-preview)
+      (org-latex-preview))))
 
 (defun org-fragtog--disable-frag (frag)
   "Disable the org latex fragment preview for the fragment FRAG."

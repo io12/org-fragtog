@@ -36,6 +36,20 @@
 
 (require 'org)
 
+(defgroup org-fragtog nil
+  "Auto-toggle org fragments"
+  :group 'org-latex)
+
+(defcustom org-fragtog-ignore-predicates nil
+  "List of predicates to determine whether to ignore a fragment.
+For example, adding `org-at-table-p' will ignore fragments inside tables."
+  :group 'org-fragtog
+  :type 'hook
+  :options '(org-at-table-p
+             org-at-table.el-p
+             org-at-block-p
+             org-at-heading-p))
+
 ;;;###autoload
 (define-minor-mode org-fragtog-mode
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
@@ -79,16 +93,21 @@ It handles toggling fragments depending on whether the cursor entered or exited 
 
 (defun org-fragtog--cursor-frag ()
   "Return the fragment currently surrounding the cursor.
-If there is none, return nil."
+If there is none, return nil.
+If the fragment is ignored from rules in `org-fragtog-ignore-predicates',
+return nil."
   (let*
       ;; Element surrounding the cursor
       ((elem (org-element-context))
        ;; Type of element surrounding the cursor
        (elem-type (car elem))
        ;; A latex fragment or environment is surrounding the cursor
-       (elem-is-latex (member elem-type '(latex-fragment latex-environment))))
+       (elem-is-latex (member elem-type '(latex-fragment latex-environment)))
+       ;; Whether the fragment should be ignored
+       (should-ignore (run-hook-with-args-until-success
+                       'org-fragtog-ignore-predicates)))
 
-    (if elem-is-latex
+    (if (and elem-is-latex (not should-ignore))
         elem
       nil)))
 

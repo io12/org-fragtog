@@ -70,7 +70,7 @@ and re-enabled when the cursor leaves."
 on a fragment. This is used to track when the cursor leaves a fragment.")
 
 (defun org-fragtog--post-cmd ()
-  "This function is executed by 'post-command-hook' in 'org-fragtog-mode'.
+  "This function is executed by `post-command-hook' in `org-fragtog-mode'.
 It handles toggling fragments depending on whether the cursor entered or exited them."
   (let*
       ;; Previous fragment

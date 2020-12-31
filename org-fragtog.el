@@ -55,6 +55,11 @@ For example, adding `org-at-table-p' will ignore fragments inside tables."
   "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
 toggles org-mode latex fragment previews as the cursor enters and exits them"
   nil nil nil
+
+  ;; Fix nil error in `org-element-context'
+  ;; when using `org-fragtog' without `org-mode'.
+  (setq org-complex-heading-regexp (or org-complex-heading-regexp ""))
+
   (if org-fragtog-mode
       (add-hook 'post-command-hook #'org-fragtog--post-cmd nil t)
     (remove-hook 'post-command-hook #'org-fragtog--post-cmd t)))

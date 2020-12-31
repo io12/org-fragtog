@@ -1,9 +1,9 @@
-;;; org-fragtog.el --- Auto-toggle org fragments -*- lexical-binding: t; -*-
+;;; org-fragtog.el --- Auto-toggle Org LaTeX fragments -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020 Benjamin Levy - MIT/X11 License
 ;; Author: Benjamin Levy <blevy@protonmail.com>
 ;; Version: 0.3.0
-;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
+;; Description: Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
 ;; Package-Requires: ((emacs "24.3") (org "9.3.2"))
 
@@ -27,7 +27,7 @@
 
 ;;; Commentary:
 
-;; This package automates toggling org-mode latex fragment
+;; This package automates toggling Org mode LaTeX fragment
 ;; previews.  Fragment previews are disabled for editing when
 ;; your cursor steps onto them, and re-enabled when the cursor
 ;; leaves.
@@ -37,7 +37,7 @@
 (require 'org)
 
 (defgroup org-fragtog nil
-  "Auto-toggle org fragments"
+  "Auto-toggle Org LaTeX fragments"
   :group 'org-latex)
 
 (defcustom org-fragtog-ignore-predicates nil
@@ -52,12 +52,13 @@ For example, adding `org-at-table-p' will ignore fragments inside tables."
 
 ;;;###autoload
 (define-minor-mode org-fragtog-mode
-  "Toggle Org Latex Fragment Autotoggle Mode, a minor mode that automatically
-toggles org-mode latex fragment previews as the cursor enters and exits them"
+  "A minor mode that automatically toggles Org mode LaTeX fragment previews.
+Fragment previews are disabled for editing when your cursor steps onto them,
+and re-enabled when the cursor leaves."
   nil nil nil
 
   ;; Fix nil error in `org-element-context'
-  ;; when using `org-fragtog' without `org-mode'.
+  ;; when using `org-fragtog' without Org mode.
   (setq org-complex-heading-regexp (or org-complex-heading-regexp ""))
 
   (if org-fragtog-mode
@@ -106,7 +107,7 @@ return nil."
       ((elem (org-element-context))
        ;; Type of element surrounding the cursor
        (elem-type (car elem))
-       ;; A latex fragment or environment is surrounding the cursor
+       ;; A LaTeX fragment or environment is surrounding the cursor
        (elem-is-latex (member elem-type '(latex-fragment latex-environment)))
        ;; Whether the fragment should be ignored
        (should-ignore (run-hook-with-args-until-success
@@ -117,10 +118,10 @@ return nil."
       nil)))
 
 (defun org-fragtog--enable-frag (frag)
-  "Enable the org latex fragment preview for the fragment FRAG."
+  "Enable the Org LaTeX fragment preview for the fragment FRAG."
 
-  ;; The fragment must be disabled before org-latex-preview, since
-  ;; org-latex-preview only toggles, leaving no guarantee that it's enabled
+  ;; The fragment must be disabled before `org-latex-preview', since
+  ;; `org-latex-preview' only toggles, leaving no guarantee that it's enabled
   ;; afterwards.
   (org-fragtog--disable-frag frag)
 
@@ -131,7 +132,7 @@ return nil."
     (org-latex-preview)))
 
 (defun org-fragtog--disable-frag (frag)
-  "Disable the org latex fragment preview for the fragment FRAG."
+  "Disable the Org LaTeX fragment preview for the fragment FRAG."
   (let
       ((pos (org-fragtog--frag-pos frag)))
     (org-clear-latex-preview (car pos)

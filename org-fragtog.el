@@ -40,6 +40,11 @@
   "Auto-toggle Org LaTeX fragments"
   :group 'org-latex)
 
+(defcustom org-fragtog-latex-backend :org-latex
+  "The backend to use to render LaTeX. Can be either org-latex or math-preview. In the latter case, this requires the math-preview package."
+  :type '(choice (const :tag "org-latex" :org-latex) (const :tag "math-preview" :math-preview))
+  :group 'org-latex)
+
 (defcustom org-fragtog-ignore-predicates nil
   "List of predicates to determine whether to ignore a fragment.
 For example, adding `org-at-table-p' will ignore fragments inside tables."
@@ -129,14 +134,18 @@ return nil."
   (save-excursion
     (goto-char (car
                 (org-fragtog--frag-pos frag)))
-    (org-latex-preview)))
+    (cond ((eq org-fragtog-latex-backend :org-latex) (org-latex-preview))
+          ((eq org-fragtog-latex-backend :math-preview) (math-preview-at-point)))
+    ))
 
 (defun org-fragtog--disable-frag (frag)
   "Disable the Org LaTeX fragment preview for the fragment FRAG."
   (let
       ((pos (org-fragtog--frag-pos frag)))
-    (org-clear-latex-preview (car pos)
-                             (cdr pos))))
+    (cond ((eq org-fragtog-latex-backend :org-latex)
+           (org-clear-latex-preview (car pos) (cdr pos)))
+          ((eq org-fragtog-latex-backend :math-preview)
+           (math-preview-clear-region (car pos) (cdr pos))))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

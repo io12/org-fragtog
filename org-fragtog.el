@@ -106,9 +106,17 @@ return nil."
       ;; Element surrounding the cursor
       ((elem (org-element-context))
        ;; Type of element surrounding the cursor
-       (elem-type (car elem))
+       (elem-type (nth 0 elem))
+       ;; List of fragment's properties
+       (elem-plist (nth 1 elem))
        ;; A LaTeX fragment or environment is surrounding the cursor
-       (elem-is-latex (member elem-type '(latex-fragment latex-environment)))
+       (elem-is-latex (and (member elem-type '(latex-fragment latex-environment))
+                           ;; Normally org-mode considers whitespace after an
+                           ;; element as part of the element.
+                           ;; Avoid this behavior and consider trailing
+                           ;; whitespace as outside the fragment.
+                           (< (point) (- (plist-get elem-plist :end)
+                                         (plist-get elem-plist :post-blank)))))
        ;; Whether the fragment should be ignored
        (should-ignore (run-hook-with-args-until-success
                        'org-fragtog-ignore-predicates)))

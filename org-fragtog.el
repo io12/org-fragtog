@@ -115,10 +115,12 @@ It handles toggling fragments depending on whether the cursor entered or exited 
         (setq org-fragtog--timer nil))
       ;; Disable fragment if cursor entered it
       (when cursor-frag
-        (setq org-fragtog--timer (run-with-idle-timer org-fragtog-preview-delay
-                                                      nil
-                                                      #'org-fragtog--disable-frag
-                                                      cursor-frag))))))
+        (if (> org-fragtog-preview-delay 0)
+            (setq org-fragtog--timer (run-with-idle-timer org-fragtog-preview-delay
+                                                          nil
+                                                          #'org-fragtog--disable-frag
+                                                          cursor-frag))
+          (org-fragtog--disable-frag cursor-frag))))))
 
 (defun org-fragtog--cursor-frag ()
   "Return the fragment currently surrounding the cursor.
@@ -169,7 +171,8 @@ return nil."
     (org-clear-latex-preview (car pos)
                              (cdr pos))
     ;; Expire timer
-    (setq org-fragtog--timer nil)))
+    (when org-fragtog--timer
+      (setq org-fragtog--timer nil))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

@@ -119,7 +119,8 @@ It handles toggling fragments depending on whether the cursor entered or exited 
             (setq org-fragtog--timer (run-with-idle-timer org-fragtog-preview-delay
                                                           nil
                                                           #'org-fragtog--disable-frag
-                                                          cursor-frag))
+                                                          cursor-frag
+                                                          t))
           (org-fragtog--disable-frag cursor-frag))))))
 
 (defun org-fragtog--cursor-frag ()
@@ -164,15 +165,24 @@ return nil."
                 (org-fragtog--frag-pos frag)))
     (org-latex-preview)))
 
-(defun org-fragtog--disable-frag (frag)
+(defun org-fragtog--disable-frag (frag &optional renew)
   "Disable the Org LaTeX fragment preview for the fragment FRAG."
-  (let
-      ((pos (org-fragtog--frag-pos frag)))
-    (org-clear-latex-preview (car pos)
-                             (cdr pos))
-    ;; Expire timer
-    (when org-fragtog--timer
-      (setq org-fragtog--timer nil))))
+
+  ;; Renew frag at point in case point was adjusted
+  ;; See Emacs Lisp manual, 21.6 Adjusting Point After Commands
+  (when renew
+    (setq frag (org-fragtog--cursor-frag))
+    (setq org-fragtog--prev-frag frag))
+
+  ;; There may be nothing at the adjusted point
+  (when frag
+    (let
+        ((pos (org-fragtog--frag-pos frag)))
+      (org-clear-latex-preview (car pos)
+                               (cdr pos))
+      ;; Expire timer
+      (when org-fragtog--timer
+        (setq org-fragtog--timer nil)))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

@@ -75,6 +75,8 @@ It handles toggling fragments depending on whether the cursor entered or exited 
   (let*
       ;; Previous fragment
       ((prev-frag org-fragtog--prev-frag)
+       ;; Previous fragment's start position
+       (prev-frag-start-pos (car (org-fragtog--frag-pos prev-frag)))
        ;; Current fragment
        (cursor-frag (org-fragtog--cursor-frag))
        ;; The current fragment didn't change
@@ -82,16 +84,22 @@ It handles toggling fragments depending on whether the cursor entered or exited 
                    ;; Fragments are considered the same if they have the same
                    ;; start position
                    (car (org-fragtog--frag-pos cursor-frag))
-                   (car (org-fragtog--frag-pos prev-frag))))
+                   prev-frag-start-pos))
        ;; The current fragment changed
-       (frag-changed (not frag-same)))
+       (frag-changed (not frag-same))
+       ;; The fragment at prev-frag still exists.
+       ;; This can be nil when for example $foo$ is edited to become $foo $.
+       (prev-frag-still-exists (and prev-frag-start-pos
+                                    (save-excursion
+                                      (goto-char prev-frag-start-pos)
+                                      (org-fragtog--cursor-frag)))))
 
     ;; Only do anything if the current fragment changed
     (when frag-changed
       ;; Current fragment is the new previous
       (setq org-fragtog--prev-frag cursor-frag)
-      ;; Enable fragment if cursor left it
-      (when prev-frag
+      ;; Enable fragment if cursor left it and it still exists
+      (when prev-frag-still-exists
         (org-fragtog--enable-frag prev-frag))
       ;; Disable fragment if cursor entered it
       (when cursor-frag

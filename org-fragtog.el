@@ -106,8 +106,10 @@ It handles toggling fragments depending on whether the cursor entered or exited 
     (when frag-changed
       ;; Current fragment is the new previous
       (setq org-fragtog--prev-frag cursor-frag)
-      ;; Enable fragment if cursor left it and it still exists
-      (when frag-at-prev-pos
+      ;; Enable fragment if cursor left it after a timed disable
+      ;; and the fragment still exists
+      (when (and frag-at-prev-pos
+                 (not org-fragtog--timer))
         (org-fragtog--enable-frag frag-at-prev-pos))
       ;; Cancel and expire timer
       (when org-fragtog--timer

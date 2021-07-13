@@ -5,7 +5,7 @@
 ;; Version: 0.3.2
 ;; Description: Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
-;; Package-Requires: ((emacs "24.3") (org "9.3.2"))
+;; Package-Requires: ((emacs "27.1"))
 
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
 ;; of this software and associated documentation files (the "Software"), to deal

@@ -21,5 +21,3 @@ Install and load the package, then add the snippet below to your config.
 Although this package uses Org mode's fragment preview feature,
 it should work with anything that uses the same fragment syntax,
 such as Markdown files or formulas in code comments.
-
-Note that ~org-fragtog~ requires a newer version of Org mode than what is currently distributed with Emacs. You can get the latest version of Org from [[https://orgmode.org/elpa.html][Org ELPA]].

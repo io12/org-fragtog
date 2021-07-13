@@ -1,4 +1,5 @@
 [[https://melpa.org/#/org-fragtog][file:https://melpa.org/packages/org-fragtog-badge.svg]]
+[[https://github.com/io12/org-fragtog/actions/workflows/check.yml][file:https://github.com/io12/org-fragtog/actions/workflows/check.yml/badge.svg]]
 
 * ~org-fragtog~
 Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them

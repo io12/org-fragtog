@@ -176,17 +176,15 @@ return nil."
   ;; See Emacs Lisp manual, 21.6 Adjusting Point After Commands
   (when renew
     (setq frag (org-fragtog--cursor-frag))
-    (setq org-fragtog--prev-frag frag))
+    (setq org-fragtog--prev-frag frag)
+    (setq org-fragtog--timer nil))
 
   ;; There may be nothing at the adjusted point
   (when frag
     (let
         ((pos (org-fragtog--frag-pos frag)))
       (org-clear-latex-preview (car pos)
-                               (cdr pos))
-      ;; Expire timer
-      (when org-fragtog--timer
-        (setq org-fragtog--timer nil)))))
+                               (cdr pos)))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

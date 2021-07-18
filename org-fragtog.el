@@ -109,7 +109,9 @@ It handles toggling fragments depending on whether the cursor entered or exited 
       ;; Enable fragment if cursor left it after a timed disable
       ;; and the fragment still exists
       (when (and frag-at-prev-pos
-                 (not org-fragtog--timer))
+                 (not (overlays-in
+                       (car (org-fragtog--frag-pos frag-at-prev-pos))
+                       (cdr (org-fragtog--frag-pos frag-at-prev-pos)))))
         (org-fragtog--enable-frag frag-at-prev-pos))
       ;; Cancel and expire timer
       (when org-fragtog--timer

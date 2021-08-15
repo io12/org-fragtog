@@ -174,7 +174,7 @@ return nil."
   (save-excursion
     (goto-char (car
                 (org-fragtog--frag-pos frag)))
-    (org-latex-preview)))
+    (ignore-errors (org-latex-preview))))
 
 (defun org-fragtog--disable-frag (frag &optional renew)
   "Disable the Org LaTeX fragment preview for the fragment FRAG."

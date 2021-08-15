@@ -109,9 +109,8 @@ It handles toggling fragments depending on whether the cursor entered or exited 
       ;; Enable fragment if cursor left it after a timed disable
       ;; and the fragment still exists
       (when (and frag-at-prev-pos
-                 (not (overlays-in
-                       (car (org-fragtog--frag-pos frag-at-prev-pos))
-                       (cdr (org-fragtog--frag-pos frag-at-prev-pos)))))
+                 (not (org-fragtog--overlay-in-p
+                       (org-fragtog--frag-pos frag-at-prev-pos))))
         (org-fragtog--enable-frag frag-at-prev-pos))
       ;; Cancel and expire timer
       (when org-fragtog--timer
@@ -126,6 +125,14 @@ It handles toggling fragments depending on whether the cursor entered or exited 
                                                           cursor-frag
                                                           t))
           (org-fragtog--disable-frag cursor-frag))))))
+
+(defun org-fragtog--overlay-in-p (range)
+  "Return whether there is a fragment overlay in RANGE.
+The RANGE parameter is a cons of start and end positions."
+  (seq-find (lambda (overlay)
+              (equal (overlay-get overlay 'org-overlay-type)
+                     'org-latex-overlay))
+            (overlays-in (car range) (cdr range))))
 
 (defun org-fragtog--cursor-frag ()
   "Return the fragment currently surrounding the cursor.

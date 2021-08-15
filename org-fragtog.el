@@ -177,7 +177,8 @@ return nil."
     (ignore-errors (org-latex-preview))))
 
 (defun org-fragtog--disable-frag (frag &optional renew)
-  "Disable the Org LaTeX fragment preview for the fragment FRAG."
+  "Disable the Org LaTeX fragment preview for the fragment FRAG.
+If RENEW is non-nil, renew the fragment at point."
 
   ;; Renew frag at point in case point was adjusted
   ;; See Emacs Lisp manual, 21.6 Adjusting Point After Commands

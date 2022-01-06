@@ -74,6 +74,9 @@ and re-enabled when the cursor leaves."
   "Previous fragment that surrounded the cursor, or nil if the cursor was not
 on a fragment. This is used to track when the cursor leaves a fragment.")
 
+(defvar-local org-fragtog--prev-point nil
+  "Value of point from before the most recent command.")
+
 (defvar-local org-fragtog--timer nil
   "Current active timer.")
 
@@ -82,7 +85,18 @@ on a fragment. This is used to track when the cursor leaves a fragment.")
 It handles toggling fragments depending on whether the cursor entered or exited them."
   (let*
       ;; Previous fragment
-      ((prev-frag org-fragtog--prev-frag)
+      ((prev-frag (or org-fragtog--prev-frag
+                      ;; If there is no previous fragment,
+                      ;; try to use a fragment at the previous cursor position.
+                      ;; This case matters when the cursor constructs a fragment
+                      ;; without ever being inside of it while it's constructed.
+                      ;; For example, if the user types "$foo$" in sequential order,
+                      ;; entering the final "$" creates a fragment without
+                      ;; the cursor ever being inside of it.
+                      (if org-fragtog--prev-point
+                          (save-excursion
+                            (goto-char org-fragtog--prev-point)
+                            (org-fragtog--cursor-frag)))))
        ;; Previous fragment's start position
        (prev-frag-start-pos (car (org-fragtog--frag-pos prev-frag)))
        ;; Current fragment
@@ -124,7 +138,11 @@ It handles toggling fragments depending on whether the cursor entered or exited 
                                                           #'org-fragtog--disable-frag
                                                           cursor-frag
                                                           t))
-          (org-fragtog--disable-frag cursor-frag))))))
+          (org-fragtog--disable-frag cursor-frag))))
+
+    (setq org-fragtog--prev-point (point))))
+
+
 
 (defun org-fragtog--overlay-in-p (range)
   "Return whether there is a fragment overlay in RANGE.

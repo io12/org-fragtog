@@ -186,7 +186,8 @@ return nil."
   ;; The fragment must be disabled before `org-latex-preview', since
   ;; `org-latex-preview' only toggles, leaving no guarantee that it's enabled
   ;; afterwards.
-  (org-fragtog--disable-frag frag)
+  (save-excursion
+    (org-fragtog--disable-frag frag))
 
   ;; Move to fragment and enable
   (save-excursion
@@ -208,9 +209,20 @@ If RENEW is non-nil, renew the fragment at point."
   ;; There may be nothing at the adjusted point
   (when frag
     (let
-        ((pos (org-fragtog--frag-pos frag)))
-      (org-clear-latex-preview (car pos)
-                               (cdr pos)))))
+        ((pos (org-fragtog--frag-pos frag))
+         (prev-point-column (save-excursion
+                              (goto-char org-fragtog--prev-point)
+                              (current-column))))
+      (org-clear-latex-preview (car pos) (cdr pos))
+      (if (and ;; Only act on LaTeX environments.
+           (member (nth 0 frag) '(latex-environment))
+           ;; Only move to the end of the fragment if it's closer to the prev-point location than
+           ;; the start of the fragment is.
+           (< (abs (- org-fragtog--prev-point (cdr pos)))
+              (abs (- org-fragtog--prev-point (car pos)))))
+          (progn ;; Move to the line where the fragment ends while preserving the point column.
+            (goto-line (line-number-at-pos (- (cdr pos) 1)))
+            (move-to-column prev-point-column))))))
 
 (defun org-fragtog--frag-pos (frag)
   "Get the position of the fragment FRAG.

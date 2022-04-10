@@ -195,7 +195,8 @@ return nil."
   ;; The fragment must be disabled before `org-latex-preview', since
   ;; `org-latex-preview' only toggles, leaving no guarantee that it's enabled
   ;; afterwards.
-  (org-fragtog--disable-frag frag)
+  (save-excursion
+    (org-fragtog--disable-frag frag))
 
   ;; Move to fragment and enable
   (save-excursion
@@ -209,6 +210,27 @@ return nil."
     ;; So, advance to the nearest non-whitespace character before enabling.
     (re-search-forward "[^ \t]")
     (ignore-errors (org-latex-preview))))
+
+(defun org-fragtog--set-point-after-disable-frag (frag)
+  "Set point to where it should be after FRAG was disabled.
+If point decreases and enters a fragment from the end, disabling it, then point
+should move to the end of the fragment.  If point moved up one line, its column
+should be maintained."
+  (when (and ;; There has to be a prev-point.
+         org-fragtog--prev-point
+         ;; Only move to the end of the fragment if it's closer to the
+         ;; prev-point location than the start of the fragment is.
+         (< (abs (- org-fragtog--prev-point (org-fragtog--frag-end frag)))
+            (abs (- org-fragtog--prev-point (org-fragtog--frag-start frag)))))
+    (let ((prev-point-column (save-excursion
+                               (goto-char org-fragtog--prev-point)
+                               (current-column))))
+      ;; Move to the line where the fragment ends while preserving the point
+      ;; column.
+      (goto-char (1- (org-fragtog--frag-end frag)))
+      (when (/= (line-number-at-pos org-fragtog--prev-point)
+                (line-number-at-pos))
+        (move-to-column prev-point-column)))))
 
 (defun org-fragtog--disable-frag (frag &optional renew)
   "Disable the Org LaTeX fragment preview for the fragment FRAG.
@@ -224,7 +246,8 @@ If RENEW is non-nil, renew the fragment at point."
   ;; There may be nothing at the adjusted point
   (when frag
     (org-clear-latex-preview (org-fragtog--frag-start frag)
-                             (org-fragtog--frag-end frag))))
+                             (org-fragtog--frag-end frag))
+    (org-fragtog--set-point-after-disable-frag frag)))
 
 (provide 'org-fragtog)
 

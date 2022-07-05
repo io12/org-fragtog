@@ -190,8 +190,15 @@ return nil."
 
   ;; Move to fragment and enable
   (save-excursion
-    (goto-char (car
-                (org-fragtog--frag-pos frag)))
+    (goto-char (car (org-fragtog--frag-pos frag)))
+    ;; Org's "\begin ... \end" style LaTeX fragments consider whitespace
+    ;; before the fragment as part of the fragment.
+    ;; Some users overload `org-latex-preview' to functions with similar functionality,
+    ;; such as `math-preview-at-point' from the `math-preview' package on MELPA.
+    ;; These alternatives might get confused if they're asked to enable a fragment at
+    ;; point when point is on whitespace before the fragment.
+    ;; So, advance to the nearest non-whitespace character before enabling.
+    (re-search-forward "[^ \t]")
     (ignore-errors (org-latex-preview))))
 
 (defun org-fragtog--disable-frag (frag &optional renew)

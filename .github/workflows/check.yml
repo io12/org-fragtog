@@ -6,6 +6,9 @@ jobs:
   check:
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
         emacs-version:
           - 27.1
           - 27.2
@@ -16,7 +19,7 @@ jobs:
           - byte-compile
           - checkdoc
           - package-lint
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: purcell/setup-emacs@master

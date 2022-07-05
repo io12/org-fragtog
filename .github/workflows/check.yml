@@ -9,6 +9,7 @@ jobs:
         emacs-version:
           - 27.1
           - 27.2
+          - 28.1
         elisp-check:
           - melpa
           - load-file

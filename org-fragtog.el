@@ -38,7 +38,7 @@
 (require 'org-element)
 
 (defgroup org-fragtog nil
-  "Auto-toggle Org LaTeX fragments"
+  "Auto-toggle Org LaTeX fragments."
   :group 'org-latex)
 
 (defcustom org-fragtog-ignore-predicates nil

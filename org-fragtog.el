@@ -35,6 +35,7 @@
 ;;; Code:
 
 (require 'org)
+(require 'org-element)
 
 (defgroup org-fragtog nil
   "Auto-toggle Org LaTeX fragments"

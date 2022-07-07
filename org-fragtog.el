@@ -72,8 +72,9 @@ and re-enabled when the cursor leaves."
     (remove-hook 'post-command-hook #'org-fragtog--post-cmd t)))
 
 (defvar-local org-fragtog--prev-frag nil
-  "Previous fragment that surrounded the cursor, or nil if the cursor was not
-on a fragment. This is used to track when the cursor leaves a fragment.")
+  "Previous fragment that surrounded the cursor.
+If the cursor was not on a fragment, this variable is nil.  This is used to
+track when the cursor leaves a fragment.")
 
 (defvar-local org-fragtog--prev-point nil
   "Value of point from before the most recent command.")
@@ -83,7 +84,8 @@ on a fragment. This is used to track when the cursor leaves a fragment.")
 
 (defun org-fragtog--post-cmd ()
   "This function is executed by `post-command-hook' in `org-fragtog-mode'.
-It handles toggling fragments depending on whether the cursor entered or exited them."
+It handles toggling fragments depending on whether the cursor entered or exited
+them."
   (let*
       ;; Previous fragment
       ((prev-frag (or org-fragtog--prev-frag

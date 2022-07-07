@@ -61,7 +61,7 @@ For example, adding `org-at-table-p' will ignore fragments inside tables."
   "A minor mode that automatically toggles Org mode LaTeX fragment previews.
 Fragment previews are disabled for editing when your cursor steps onto them,
 and re-enabled when the cursor leaves."
-  nil nil nil
+  :init-value nil
 
   ;; Fix nil error in `org-element-context'
   ;; when using `org-fragtog' without Org mode.

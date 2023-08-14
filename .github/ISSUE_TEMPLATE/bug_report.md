@@ -27,6 +27,7 @@ If applicable, add GIFs or videos to help explain your problem. GitHub allows up
 
 - OS: [e.g. GNU+Linux, macOS, Windows]
 - Emacs version [e.g. 27.2]
+- Org version [e.g. 9.5.5]
 
 **Additional context**
 Add any other context about the problem here.
